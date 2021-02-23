@@ -106,9 +106,9 @@ export function prepare_n_run_style(image_src,result_canvas){
     
 
     // Load an image of intrinsic size 300x227 in CSS pixels
-    image.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
-    image.src = 'ChristmasLogo.png';
-    image.src = 'amber.jpg';
+    // image.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+    // image.src = 'ChristmasLogo.png';
+    // image.src = 'amber.jpg';
     image.src = image_src;
 
     function drawImageActualSize() {
