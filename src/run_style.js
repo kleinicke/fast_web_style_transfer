@@ -2,15 +2,25 @@ import ndarray from 'ndarray';
 import ops from 'ndarray-ops';
 import { Tensor, InferenceSession } from "onnxjs";
 
-const image_size=135
 
-async function runOnnx(inputTensor,canvas_name) {
+async function runOnnx(inputTensor,canvas_name,image_size) {
     // Creat the session and load the pre-trained model
     const session = new InferenceSession({
         backendHint: 'webgl'
     });
-
-    await session.loadModel("small135.onnx");//small_135
+    if (image_size == 135){
+        await session.loadModel("small135.onnx");
+    }else if (image_size == 200){
+        await session.loadModel("small200.onnx");
+    }else if (image_size == 270){
+        await session.loadModel("small270.onnx");
+    }else if (image_size == 300){
+        await session.loadModel("small300.onnx");
+    }else if (image_size == 350){
+        await session.loadModel("small350.onnx");
+    }else if (image_size == 540){
+        await session.loadModel("small540.onnx");//small_135
+    }
 
     // Run model with Tensor inputs and get the result.
         // console.log("input_pre!!!",preprocessedData)
@@ -96,7 +106,7 @@ export function draw_canvas(image_src,canvas_name,image_size){
 
 }
 
-export function prepare_n_run_style(image_src,result_canvas){
+export function prepare_n_run_style(image_src,result_canvas,image_size){
     // const canvas = document.getElementById('beforeCanvas');
     var canvas = document.createElement("canvas");
     // console.log(canvas)
@@ -141,7 +151,7 @@ export function prepare_n_run_style(image_src,result_canvas){
         // (tensor.data as Float32Array).set(dataProcessed.data);
         (tensor.data).set(dataProcessed.data);
         console.log("tensor",tensor)
-        runOnnx(tensor,result_canvas)
+        runOnnx(tensor,result_canvas,image_size)
         // draw_canvas(image.src,'beforeCanvas',image_size)
         // canvas_old(image.src)
         
