@@ -1,21 +1,20 @@
 <script>
-  import { prepare_n_run_style, draw_canvas } from "./run_style.js";
+  import { prepareAndRunStyle, draw_canvas } from "./runStyle.js";
 
-  let image_size = 200; // options are 135, 270, 360 and 540
+  const initialSize = 200;
+  let imageSize = initialSize; // options are 135, 270, 360 and 540
 
-  function toFloat(image) {
-    console.log("toFloat");
-    console.log(image);
-    ctx.drawImage(img, 0, 0);
-    var imgData = ctx.getImageData(x, y, width, height).data;
-    floatImage = new Float32Array(image);
-    console.log(floatImage);
-  }
-  let selected_image;
-  const beginning_size = image_size;
+  // function toFloat(image) {
+  //   ctx.drawImage(img, 0, 0);
+  //   var imgData = ctx.getImageData(x, y, width, height).data;
+  //   floatImage = new Float32Array(image);
+  // }
+
+  let selectedImg;
+  let style = "candy"; // gogh
   function init() {
-    draw_canvas("amber.jpg", "fixedCanvas", beginning_size);
-    prepare_n_run_style("amber.jpg", "fixedStyleCanvas", beginning_size);
+    draw_canvas("amber.jpg", "fixedCanvas", initialSize);
+    prepareAndRunStyle("amber.jpg", "fixedStyleCanvas", initialSize, "candy");
     window.addEventListener("load", function () {
       document
         .querySelector('input[type="file"]')
@@ -23,16 +22,17 @@
           if (this.files && this.files[0]) {
             // var image = document.querySelector("img");
             var img = document.querySelector("img");
-            selected_image = URL.createObjectURL(this.files[0]);
+            selectedImg = URL.createObjectURL(this.files[0]);
             draw_canvas(
               URL.createObjectURL(this.files[0]),
               "selectCanvas",
-              image_size
+              imageSize
             );
-            prepare_n_run_style(
+            prepareAndRunStyle(
               URL.createObjectURL(this.files[0]),
               "selectStyleCanvas",
-              image_size
+              imageSize,
+              style
             );
           }
         });
@@ -50,21 +50,26 @@
   <h2>Lets perform a Style transfer on a pre-selected image</h2>
   <br />
 
-  <canvas id="fixedCanvas" width={beginning_size} height={beginning_size} />
-  <canvas
-    id="fixedStyleCanvas"
-    width={beginning_size}
-    height={beginning_size}
-  />
+  <canvas id="fixedCanvas" width={initialSize} height={initialSize} />
+  <canvas id="fixedStyleCanvas" width={initialSize} height={initialSize} />
 
-  <h2>Now it's your turn. Choose your own image and see the result</h2>
+  <h2>
+    Now it's your turn. Choose a style and your own image and see the result
+  </h2>
+  <label>
+    Style:
+    <input type="radio" bind:group={style} value="gogh" />
+    Van Gogh
+    <input type="radio" bind:group={style} value="candy" />
+    Candy
+  </label>
   <br />
 
   <input type="file" />
   <br />
   <!-- <img bind:src={selected_image} alt="your image" /> -->
-  <canvas id="selectCanvas" width={image_size} height={image_size} />
-  <canvas id="selectStyleCanvas" width={image_size} height={image_size} />
+  <canvas id="selectCanvas" width={imageSize} height={imageSize} />
+  <canvas id="selectStyleCanvas" width={imageSize} height={imageSize} />
 
   <h2>You can also modify the size of the images</h2>
   <br />
@@ -73,52 +78,50 @@
     afterwards)
   </h2>
 
-  <label>
-    For iPhones:
-    <input type="radio" bind:group={image_size} value={135} />
-    135
-    <!-- </label>
+  {#if style === `candy`}
+    <label>
+      For iPhones:
+      <input type="radio" bind:group={imageSize} value={135} />
+      135
+      <!-- </label>
   <label> -->
-    <input type="radio" bind:group={image_size} value={200} />
-    200
-  </label>
-  <label>
-    For Macs:
-    <input type="radio" bind:group={image_size} value={270} />
-    270
-    <input type="radio" bind:group={image_size} value={300} />
-    300
-  </label>
-  <label>
-    My browser gives up on those:
-    <input type="radio" bind:group={image_size} value={350} />
-    350
-    <input type="radio" bind:group={image_size} value={540} />
-    540
-  </label>
-  <label>
-    <input type="number" bind:value={image_size} />
-    <!--list="image_size_options"-->
-    <!-- <input type="range" bind:value={image_size} list="image_size_options" /> -->
-  </label>
+      <input type="radio" bind:group={imageSize} value={200} />
+      200
+    </label>
+    <label>
+      For Macs:
+      <input type="radio" bind:group={imageSize} value={270} />
+      270
+      <input type="radio" bind:group={imageSize} value={300} />
+      300
+    </label>
+    <label>
+      My browser gives up on those:
+      <input type="radio" bind:group={imageSize} value={350} />
+      350
+      <input type="radio" bind:group={imageSize} value={540} />
+      540
+    </label>
+    <label>
+      <input type="number" bind:value={imageSize} />
+      <!--list="image_size_options"-->
+      <!-- <input type="range" bind:value={image_size} list="image_size_options" /> -->
+    </label>
+  {:else if style === `gogh`}
+    {#each [200, 350, 400, 500, 1000, 1500, 4000] as value}
+      <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
+    {/each}
+  {/if}
 
-  <!-- <select name="cars" id="cars">
-    <option bind:value={image_size}>135</option>
-    <option bind:value={image_size}>270</option>
-    <option bind:value={image_size}>360</option>
-    <option bind:value={image_size}>540</option>
-  </select> -->
   <h2>
     The code is available <a
-      href="https://github.com/kleinicke/fast_web_style_transfer"
-      >here on github</a
-    > and a tutorial is in the works
+      href="https://github.com/kleinicke/fast_web_style_transfer">on GitHub</a
+    > and a tutorial is in the works.
   </h2>
 </main>
 
 <style>
   main {
-    font-family: sans-serif;
     text-align: center;
   }
 </style>
