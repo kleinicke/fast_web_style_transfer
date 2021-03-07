@@ -1,11 +1,11 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { Tensor, InferenceSession } from "onnxjs";
-import { ImageLoader } from "./image-loader.js";
+// import { ImageLoader } from "./image-loader.js";
 
 async function runOnnx(inputTensor, canvas_name, image_size, style) {
   // Creat the session and load the pre-trained model
-  const session = new InferenceSession({
+  let session = new InferenceSession({
     backendHint: "webgl",
   });
   if (style == "candy") {
@@ -18,6 +18,7 @@ async function runOnnx(inputTensor, canvas_name, image_size, style) {
   // console.log("input_pre!!!",preprocessedData)
   // const inputTensor = new onnx.Tensor(preprocessedData, 'float32');
   const outputMap = await session.run([inputTensor]);
+  session = null;
   let outputData = outputMap.values().next().value.data;
   // console.log(
   //   "result!!!",
@@ -96,22 +97,11 @@ export function draw_canvas(imageSrc, canvas_name, image_size) {
   image.onload = drawImageActualSize;
 }
 
-function addImageProcess(src, image) {
-  return new Promise((resolve, reject) => {
-    image.onload = () => resolve(image.height);
-    image.onerror = reject;
-    image.src = src;
-  });
-}
-
 async function getData(imageSrc, imageSize) {
   let canvas = document.createElement("canvas");
-  // console.log(canvas)
   const ctx = canvas.getContext("2d");
-  const image = new Image(imageSize, imageSize); // Using optional size for image
-  addImageProcess(imageSrc, image);
-
-  // image.src = imageSrc;
+  const image = new Image(imageSize, imageSize);
+  image.src = imageSrc;
   await new Promise((resolve, reject) => {
     image.onload = () => resolve(image.height);
     image.onerror = reject;
@@ -121,8 +111,6 @@ async function getData(imageSrc, imageSize) {
   canvas.height = imageSize;
   ctx.drawImage(image, 0, 0, image.width, image.height);
   const imgData = ctx.getImageData(0, 0, imageSize, imageSize).data;
-  // let loader = new ImageLoader(imageSize, imageSize);
-  // imgData = loader.getImageData(imageSrc);
   return new Float32Array(imgData);
 }
 
@@ -135,8 +123,8 @@ export async function prepareAndRunStyle(
   // const canvas = document.getElementById('beforeCanvas');
   let floatData = await getData(imageSrc, imageSize);
 
-  const dataFromImage = ndarray(floatData, [imageSize, imageSize, 4]);
-  const dataProcessed = ndarray(new Float32Array(imageSize * imageSize * 3), [
+  let dataFromImage = ndarray(floatData, [imageSize, imageSize, 4]);
+  let dataProcessed = ndarray(new Float32Array(imageSize * imageSize * 3), [
     1,
     3,
     imageSize,
@@ -162,6 +150,8 @@ export async function prepareAndRunStyle(
   // (tensor.data as Float32Array).set(dataProcessed.data);
   tensor.data.set(dataProcessed.data);
   console.log("preprocessed data", floatData, dataFromImage, dataProcessed);
+  dataFromImage = null;
+  dataProcessed = null;
 
   runOnnx(tensor, resultCanvas, imageSize, style);
 }

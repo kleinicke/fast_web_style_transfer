@@ -6,30 +6,23 @@
 
   // function toFloat(image) {
   //   ctx.drawImage(img, 0, 0);
-  //   var imgData = ctx.getImageData(x, y, width, height).data;
+  //   let imgData = ctx.getImageData(x, y, width, height).data;
   //   floatImage = new Float32Array(image);
   // }
 
-  let selectedImg;
-  let style = "candy"; // gogh
+  let style = "gogh"; // gogh
   function init() {
-    draw_canvas("amber.jpg", "fixedCanvas", initialSize);
-    prepareAndRunStyle("amber.jpg", "fixedStyleCanvas", initialSize, "candy");
+    draw_canvas("birds.jpg", "fixedCanvas", initialSize);
+    prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", initialSize, style);
     window.addEventListener("load", function () {
       document
         .querySelector('input[type="file"]')
         .addEventListener("change", function () {
           if (this.files && this.files[0]) {
-            // var image = document.querySelector("img");
-            var img = document.querySelector("img");
-            selectedImg = URL.createObjectURL(this.files[0]);
-            draw_canvas(
-              URL.createObjectURL(this.files[0]),
-              "selectCanvas",
-              imageSize
-            );
+            let selectedImg = URL.createObjectURL(this.files[0]);
+            draw_canvas(selectedImg, "selectCanvas", imageSize);
             prepareAndRunStyle(
-              URL.createObjectURL(this.files[0]),
+              selectedImg,
               "selectStyleCanvas",
               imageSize,
               style
@@ -80,7 +73,7 @@
 
   {#if style === `candy`}
     <label>
-      For iPhones:
+      For iPhones (with 4GB memory):
       <input type="radio" bind:group={imageSize} value={135} />
       135
       <!-- </label>
@@ -89,14 +82,14 @@
       200
     </label>
     <label>
-      For Macs:
+      For some Macs without GPU:
       <input type="radio" bind:group={imageSize} value={270} />
       270
       <input type="radio" bind:group={imageSize} value={300} />
       300
     </label>
     <label>
-      My browser gives up on those:
+      With more power:
       <input type="radio" bind:group={imageSize} value={350} />
       350
       <input type="radio" bind:group={imageSize} value={540} />
@@ -108,7 +101,7 @@
       <!-- <input type="range" bind:value={image_size} list="image_size_options" /> -->
     </label>
   {:else if style === `gogh`}
-    {#each [200, 350, 400, 500, 1000, 1500, 4000] as value}
+    {#each [200, 300, 350, 400, 500, 1000, 1500, 4000] as value}
       <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
     {/each}
   {/if}
