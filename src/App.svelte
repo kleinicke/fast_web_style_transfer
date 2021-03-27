@@ -1,7 +1,8 @@
 <script>
-  import { prepareAndRunStyle, draw_canvas } from "./runStyle.js";
-
-  const initialSize = 200;
+  import { prepareAndRunStyle, drawCanvas } from "./runStyle.js";
+  import SvelteMarkdown from 'svelte-markdown';
+  import {mdText} from './tutorial.js'
+  const initialSize = 135;
   let imageSize = initialSize; // options are 135, 270, 360 and 540
 
   // function toFloat(image) {
@@ -10,9 +11,9 @@
   //   floatImage = new Float32Array(image);
   // }
 
-  let style = "gogh"; // gogh
+  let style = "candy" // gogh
   function init() {
-    draw_canvas("birds.jpg", "fixedCanvas", initialSize);
+    drawCanvas("birds.jpg", "fixedCanvas", initialSize);
     prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", initialSize, style);
     window.addEventListener("load", function () {
       document
@@ -20,7 +21,7 @@
         .addEventListener("change", function () {
           if (this.files && this.files[0]) {
             let selectedImg = URL.createObjectURL(this.files[0]);
-            draw_canvas(selectedImg, "selectCanvas", imageSize);
+            drawCanvas(selectedImg, "selectCanvas", imageSize);
             prepareAndRunStyle(
               selectedImg,
               "selectStyleCanvas",
@@ -32,14 +33,27 @@
     });
   }
   document.addEventListener("DOMContentLoaded", init, false);
+
+  const oldmdText = `# How to perform a neural style transfer on a website using onnx.js
+
+Neural networks are becoming more powerful. In this tutorial I explore the possibilities of neural networks running in a browser. I chose to use a fast neural style transfer that was implemented in the PyTorch examples. Sadly it had to be modified to be compatible with onnx.js. This modified network is trained using Google Colab and the resulting model exported as a onnx model. This model is used on a simple website using svelte and hosted using netlify. Therefore every step in this tutorial can be repeated by everyone without any costs or special hardware requirements.
+ In the end I'll point out the problems and limitations of onnx.js.
+This tutorial is for developers that know PyTorch and neural style transfer, but want to learn how to present these results in the browser.
+If you just want to work with the finished code:
+- [Here](https://github.com/kleinicke/onnx_small_style) is the code to train the model.
+- Use [this colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing) to train a model
+- Add the trained model to [this website](https://github.com/kleinicke/fast_web_style_transfer)
+- publish the website on [netlify](https://www.netlify.com)
+`
 </script>
 
 <main>
-  <datalist id="image_size_options">
+  <datalist id="imageSizeOptions">
     <option value="135" /><option value="270" /><option value="360" /><option
       value="540"
     /></datalist
   >
+
   <h2>Lets perform a Style transfer on a pre-selected image</h2>
   <br />
 
@@ -97,8 +111,8 @@
     </label>
     <label>
       <input type="number" bind:value={imageSize} />
-      <!--list="image_size_options"-->
-      <!-- <input type="range" bind:value={image_size} list="image_size_options" /> -->
+      <!--list="imageSizeOptions"-->
+      <!-- <input type="range" bind:value={imageSize} list="imageSizeOptions" /> -->
     </label>
   {:else if style === `gogh`}
     {#each [200, 300, 350, 400, 500, 1000, 1500, 4000] as value}
@@ -107,14 +121,22 @@
   {/if}
 
   <h2>
-    The code is available <a
+    The code of this website is available <a
       href="https://github.com/kleinicke/fast_web_style_transfer">on GitHub</a
     > and a tutorial is in the works.
-  </h2>
+  </h2>  
+
 </main>
+<infotext>
+  <SvelteMarkdown source={mdText}/>
+</infotext>
 
 <style>
   main {
     text-align: center;
+  }
+  infotext {
+    text-align: left;
+    padding: 25px 500px 75px;
   }
 </style>

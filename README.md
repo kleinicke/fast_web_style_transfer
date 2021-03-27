@@ -1,22 +1,19 @@
-*Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Fast neural style transfer svelte website
 
----
+This website uses onnx.js to apply a fast neural style transfer.
 
-# svelte app
+## svelte app
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+This is a project uses the template for [Svelte](https://svelte.dev) apps. It lives at <https://github.com/sveltejs/template>.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+To run this app, you need to call `yarn` to install all dependencies and `yarn dev` to build the site.
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
+Please install yarn beforehand.
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+This app is used on the website: <https://fast-web-style-transfer.netlify.app>. On that website a tutorial to build this website is provided.
+The used model was created using [this repro](https://github.com/kleinicke/onnx_small_style) in [this google colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing).
 
-
-## Get started
+<!-- ## Get started
 
 Install the dependencies...
 
@@ -46,7 +43,6 @@ npm run build
 ```
 
 You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
 
 ## Single-page app mode
 
@@ -102,4 +98,4 @@ Then, from within your project folder:
 ```bash
 npm run build
 surge public my-project.surge.sh
-```
+``` -->

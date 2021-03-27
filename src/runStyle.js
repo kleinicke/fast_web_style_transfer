@@ -3,15 +3,15 @@ import ops from "ndarray-ops";
 import { Tensor, InferenceSession } from "onnxjs";
 // import { ImageLoader } from "./image-loader.js";
 
-async function runOnnx(inputTensor, canvas_name, image_size, style) {
+async function runOnnx(inputTensor, canvasName, imageSize, style) {
   // Creat the session and load the pre-trained model
   let session = new InferenceSession({
     backendHint: "webgl",
   });
   if (style == "candy") {
-    await session.loadModel("small" + image_size + ".onnx");
+    await session.loadModel("small" + imageSize + ".onnx");
   } else if (style == "gogh") {
-    await session.loadModel("gogh" + image_size + ".onnx");
+    await session.loadModel("gogh" + imageSize + ".onnx");
   }
 
   // Run model with Tensor inputs and get the result.
@@ -31,16 +31,16 @@ async function runOnnx(inputTensor, canvas_name, image_size, style) {
 
   // let test = new Float32Array(outputData);
 
-  const dataFromImage = ndarray(new Float32Array(image_size * image_size * 4), [
-    image_size,
-    image_size,
+  const dataFromImage = ndarray(new Float32Array(imageSize * imageSize * 4), [
+    imageSize,
+    imageSize,
     4,
   ]);
   const dataProcessed = ndarray(new Float32Array(outputData), [
     1,
     3,
-    image_size,
-    image_size,
+    imageSize,
+    imageSize,
   ]);
   // ops.assign(dataFromImage.pick(null, null, 3),255);//todo change!
   ops.assign(
@@ -56,25 +56,25 @@ async function runOnnx(inputTensor, canvas_name, image_size, style) {
     dataProcessed.pick(0, 2, null, null)
   );
   let dataForImage = dataFromImage.data;
-  for (let y = 0; y < image_size; y++) {
-    for (let x = 0; x < image_size; x++) {
-      let pos = (y * image_size + x) * 4; // position in buffer based on x and y
+  for (let y = 0; y < imageSize; y++) {
+    for (let x = 0; x < imageSize; x++) {
+      let pos = (y * imageSize + x) * 4; // position in buffer based on x and y
       dataForImage[pos + 3] = 255; // set alpha channel
     }
   }
   console.log("result", outputMap, dataFromImage, dataProcessed, dataForImage);
 
-  // buffer = new Uint8ClampedArray(image_size * image_size * 4);
+  // buffer = new Uint8ClampedArray(imageSize * imageSize * 4);
   // let canvas = document.createElement('canvas'),
-  let canvas = document.getElementById(canvas_name);
+  let canvas = document.getElementById(canvasName);
 
   let ctx = canvas.getContext("2d");
 
-  canvas.width = image_size;
-  canvas.height = image_size;
+  canvas.width = imageSize;
+  canvas.height = imageSize;
 
   // create imageData object
-  let idata = ctx.createImageData(image_size, image_size);
+  let idata = ctx.createImageData(imageSize, imageSize);
 
   // set our buffer as source
   idata.data.set(dataForImage);
@@ -83,15 +83,15 @@ async function runOnnx(inputTensor, canvas_name, image_size, style) {
   ctx.putImageData(idata, 0, 0);
 }
 
-export function draw_canvas(imageSrc, canvas_name, image_size) {
-  const canvas = document.getElementById(canvas_name);
+export function drawCanvas(imageSrc, canvasName, imageSize) {
+  const canvas = document.getElementById(canvasName);
   // console.log("c",canvas)
   const ctx = canvas.getContext("2d");
-  const image = new Image(image_size, image_size);
+  const image = new Image(imageSize, imageSize);
   image.src = imageSrc;
   function drawImageActualSize() {
-    canvas.width = image_size; //this.naturalWidth;
-    canvas.height = image_size; //this.naturalHeight;
+    canvas.width = imageSize; //this.naturalWidth;
+    canvas.height = imageSize; //this.naturalHeight;
     ctx.drawImage(this, 0, 0, this.width, this.height);
   }
   image.onload = drawImageActualSize;
