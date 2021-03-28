@@ -1,17 +1,14 @@
 # Fast neural style transfer svelte website
 
-This website uses onnx.js to apply a fast neural style transfer.
+This website uses onnx.js to apply a fast neural style transfer. It is used on <https://fast-web-style-transfer.netlify.app>. On that website a tutorial to build this website is provided.
+
+The used model was created using the model I created [here](https://github.com/kleinicke/onnx_small_style). This can be run using [this google colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing).
 
 ## svelte app
 
-This is a project uses the template for [Svelte](https://svelte.dev) apps. It lives at <https://github.com/sveltejs/template>.
+This is a project uses the template for [Svelte](https://svelte.dev) apps which lives at <https://github.com/sveltejs/template>.
 
-To run this app, you need to call `yarn` to install all dependencies and `yarn dev` to build the site.
-
-Please install yarn beforehand.
-
-This app is used on the website: <https://fast-web-style-transfer.netlify.app>. On that website a tutorial to build this website is provided.
-The used model was created using [this repro](https://github.com/kleinicke/onnx_small_style) in [this google colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing).
+To run this app, you need to install yarn and enter `yarn` to install all dependencies and `yarn dev` to build the site.
 
 <!-- ## Get started
 

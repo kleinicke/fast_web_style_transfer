@@ -1,7 +1,8 @@
 <script>
   import { prepareAndRunStyle, drawCanvas } from "./runStyle.js";
   import SvelteMarkdown from 'svelte-markdown';
-  import {mdText} from './tutorial.js'
+  // import Nav from './Nav.svelte'
+  import Tutorial from './Tutorial.svelte'
   const initialSize = 135;
   let imageSize = initialSize; // options are 135, 270, 360 and 540
 
@@ -11,7 +12,7 @@
   //   floatImage = new Float32Array(image);
   // }
 
-  let style = "candy" // gogh
+  let style =  "gogh" //"candy"
   function init() {
     drawCanvas("birds.jpg", "fixedCanvas", initialSize);
     prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", initialSize, style);
@@ -34,19 +35,8 @@
   }
   document.addEventListener("DOMContentLoaded", init, false);
 
-  const oldmdText = `# How to perform a neural style transfer on a website using onnx.js
-
-Neural networks are becoming more powerful. In this tutorial I explore the possibilities of neural networks running in a browser. I chose to use a fast neural style transfer that was implemented in the PyTorch examples. Sadly it had to be modified to be compatible with onnx.js. This modified network is trained using Google Colab and the resulting model exported as a onnx model. This model is used on a simple website using svelte and hosted using netlify. Therefore every step in this tutorial can be repeated by everyone without any costs or special hardware requirements.
- In the end I'll point out the problems and limitations of onnx.js.
-This tutorial is for developers that know PyTorch and neural style transfer, but want to learn how to present these results in the browser.
-If you just want to work with the finished code:
-- [Here](https://github.com/kleinicke/onnx_small_style) is the code to train the model.
-- Use [this colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing) to train a model
-- Add the trained model to [this website](https://github.com/kleinicke/fast_web_style_transfer)
-- publish the website on [netlify](https://www.netlify.com)
-`
 </script>
-
+<!-- <Nav/> -->
 <main>
   <datalist id="imageSizeOptions">
     <option value="135" /><option value="270" /><option value="360" /><option
@@ -74,15 +64,14 @@ If you just want to work with the finished code:
 
   <input type="file" />
   <br />
-  <!-- <img bind:src={selected_image} alt="your image" /> -->
   <canvas id="selectCanvas" width={imageSize} height={imageSize} />
   <canvas id="selectStyleCanvas" width={imageSize} height={imageSize} />
 
   <h2>You can also modify the size of the images</h2>
   <br />
   <h2>
-    (enter 135, 200, 270, 300, 350 or 540 and choose a different image
-    afterwards)
+    (enter size and choose a different image
+    afterwards. Large sizes might lead to problems.)
   </h2>
 
   {#if style === `candy`}
@@ -90,8 +79,6 @@ If you just want to work with the finished code:
       For iPhones (with 4GB memory):
       <input type="radio" bind:group={imageSize} value={135} />
       135
-      <!-- </label>
-  <label> -->
       <input type="radio" bind:group={imageSize} value={200} />
       200
     </label>
@@ -111,11 +98,9 @@ If you just want to work with the finished code:
     </label>
     <label>
       <input type="number" bind:value={imageSize} />
-      <!--list="imageSizeOptions"-->
-      <!-- <input type="range" bind:value={imageSize} list="imageSizeOptions" /> -->
     </label>
   {:else if style === `gogh`}
-    {#each [200, 300, 350, 400, 500, 1000, 1500, 4000] as value}
+    {#each [135,200, 300, 350, 400, 500, 1000, 1500, 4000] as value}
       <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
     {/each}
   {/if}
@@ -123,20 +108,13 @@ If you just want to work with the finished code:
   <h2>
     The code of this website is available <a
       href="https://github.com/kleinicke/fast_web_style_transfer">on GitHub</a
-    > and a tutorial is in the works.
+    > and a first version of the tutorial is below.
   </h2>  
-
 </main>
-<infotext>
-  <SvelteMarkdown source={mdText}/>
-</infotext>
+<Tutorial/>
 
 <style>
   main {
     text-align: center;
-  }
-  infotext {
-    text-align: left;
-    padding: 25px 500px 75px;
   }
 </style>
