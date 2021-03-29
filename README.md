@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d0e692a2-1cf8-444d-a5e2-383b6103222d/deploy-status)](https://app.netlify.com/sites/fast-web-style-transfer/deploys)
+
 # Fast neural style transfer svelte website
 
 This website uses onnx.js to apply a fast neural style transfer. It is used on <https://fast-web-style-transfer.netlify.app>. On that website a tutorial to build this website is provided.
@@ -8,7 +10,27 @@ The used model was created using the model I created [here](https://github.com/k
 
 This is a project uses the template for [Svelte](https://svelte.dev) apps which lives at <https://github.com/sveltejs/template>.
 
-To run this app, you need to install yarn and enter `yarn` to install all dependencies and `yarn dev` to build the site.
+## Setup
+
+Running this site locally requires [`git`](https://git-scm.com) and [`yarn`](https://yarnpkg.com) (or [`npm`](https://npmjs.com)). With those installed, do:
+
+1. Clone the repo and change into its directory.
+
+   ```sh
+   git clone https://github.com/kleinicke/fast_web_style_transfer && cd fast_web_style_transfer
+   ```
+
+2. Install dependencies.
+
+   ```sh
+   yarn
+   ```
+
+3. Start the dev server.
+
+   ```sh
+   yarn dev
+   ```
 
 <!-- ## Get started
 

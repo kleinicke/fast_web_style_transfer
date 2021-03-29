@@ -10,9 +10,11 @@ async function runOnnx(inputTensor, canvasName, imageSize, style) {
   });
   if (style == "candy") {
     await session.loadModel("small" + imageSize + ".onnx");
-  } else if (style == "gogh") {
-    await session.loadModel("gogh" + imageSize + ".onnx");
-  }
+  } else {
+    await session.loadModel(style + imageSize + ".onnx");
+  } // else if (style == "gogh") {
+  //   await session.loadModel("gogh" + imageSize + ".onnx");
+  // }
 
   // Run model with Tensor inputs and get the result.
   // console.log("input_pre!!!",preprocessedData)

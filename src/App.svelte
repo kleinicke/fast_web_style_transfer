@@ -5,17 +5,21 @@
   import Tutorial from './Tutorial.svelte'
   const initialSize = 135;
   let imageSize = initialSize; // options are 135, 270, 360 and 540
+  let exampleSize = initialSize;
+
+  const initialStyle =  "gogh" //"candy" "rain"
+  let style = initialStyle
+  let exampleStyle = initialStyle
 
   // function toFloat(image) {
   //   ctx.drawImage(img, 0, 0);
   //   let imgData = ctx.getImageData(x, y, width, height).data;
   //   floatImage = new Float32Array(image);
   // }
-
-  let style =  "gogh" //"candy"
+  $: prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", exampleSize, exampleStyle);
   function init() {
-    drawCanvas("birds.jpg", "fixedCanvas", initialSize);
-    prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", initialSize, style);
+    drawCanvas("birds.jpg", "fixedCanvas", 300);
+    // prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", exampleSize, exampleStyle);
     window.addEventListener("load", function () {
       document
         .querySelector('input[type="file"]')
@@ -44,14 +48,27 @@
     /></datalist
   >
 
-  <h2>Lets perform a Style transfer on a pre-selected image</h2>
+  <h2>Lets perform a style transfer on a pre-selected image</h2>
+  <h3>You can change style and size:</h3>
+  <label>
+    Style:
+    <input type="radio" bind:group={exampleStyle} value="gogh" />
+    Van Gogh
+    <input type="radio" bind:group={exampleStyle} value="candy" />
+    Candy
+    <input type="radio" bind:group={exampleStyle} value="rain" />
+    Rain Princess
+  </label>
+  {#each [135,200, 300, 350] as value}
+      <input type="radio" bind:group={exampleSize} {value} />&emsp;{value}&emsp;
+    {/each}
   <br />
 
-  <canvas id="fixedCanvas" width={initialSize} height={initialSize} />
-  <canvas id="fixedStyleCanvas" width={initialSize} height={initialSize} />
+  <canvas id="fixedCanvas" width={300} height={300} />
+  <canvas id="fixedStyleCanvas" width={initialSize} height={exampleSize} />
 
   <h2>
-    Now it's your turn. Choose a style and your own image and see the result
+    Now it's your turn. Choose a style and your own content image and see the result
   </h2>
   <label>
     Style:
@@ -59,6 +76,8 @@
     Van Gogh
     <input type="radio" bind:group={style} value="candy" />
     Candy
+    <input type="radio" bind:group={style} value="rain" />
+    Rain Princess
   </label>
   <br />
 
@@ -76,31 +95,31 @@
 
   {#if style === `candy`}
     <label>
-      For iPhones (with 4GB memory):
+      Small size (for phones):
       <input type="radio" bind:group={imageSize} value={135} />
       135
       <input type="radio" bind:group={imageSize} value={200} />
       200
     </label>
     <label>
-      For some Macs without GPU:
+      Good size (works on most computers):
       <input type="radio" bind:group={imageSize} value={270} />
       270
       <input type="radio" bind:group={imageSize} value={300} />
       300
     </label>
     <label>
-      With more power:
+      Large (requires some performance):
       <input type="radio" bind:group={imageSize} value={350} />
       350
       <input type="radio" bind:group={imageSize} value={540} />
       540
     </label>
-    <label>
+    <!-- <label>
       <input type="number" bind:value={imageSize} />
-    </label>
-  {:else if style === `gogh`}
-    {#each [135,200, 300, 350, 400, 500, 1000, 1500, 4000] as value}
+    </label> -->
+  {:else if style === `gogh` || style === `rain`}
+    {#each [135,200, 300, 350, 400, 500, 1000] as value}
       <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
     {/each}
   {/if}

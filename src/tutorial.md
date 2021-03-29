@@ -1,9 +1,11 @@
 # How to perform a neural style transfer on a website using ONNX.js
 
 Neural networks are becoming more powerful. In this tutorial I explore the possibilities of neural networks running in a browser. I chose to use a fast neural style transfer that was implemented in the PyTorch examples. Sadly it had to be modified to be compatible with ONNX.js. This modified network is trained using Google Colab and the resulting model exported as a ONNX model. This model is used on a simple website using Svelte and hosted using netlify. Therefore every step in this tutorial can be repeated by everyone without any costs or special hardware requirements.
- In the end I'll point out the problems and limitations of ONNX.js.
+In the end I'll point out the problems and limitations of ONNX.js.
 This tutorial is for developers that know PyTorch and neural style transfer, but want to learn how to present these results in the browser.
 If you just want to work with the finished code:
+
+## Short version
 
 - [Here](https://github.com/kleinicke/onnx_small_style) is the code to train the model.
 - Use [this colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing) to train a model
