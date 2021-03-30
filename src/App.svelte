@@ -1,24 +1,34 @@
 <script>
   import { prepareAndRunStyle, drawCanvas } from "./runStyle.js";
-  import SvelteMarkdown from 'svelte-markdown';
+  import SvelteMarkdown from "svelte-markdown";
   // import Nav from './Nav.svelte'
-  import Tutorial from './Tutorial.svelte'
+  import Tutorial from "./Tutorial.svelte";
+  let initFinished = false;
   const initialSize = 135;
   let imageSize = initialSize; // options are 135, 270, 360 and 540
   let exampleSize = initialSize;
 
-  const initialStyle =  "gogh" //"candy" "rain"
-  let style = initialStyle
-  let exampleStyle = initialStyle
+  const initialStyle = "gogh"; //"candy" "rain"
+  let style = initialStyle;
+  let exampleStyle = initialStyle;
 
   // function toFloat(image) {
   //   ctx.drawImage(img, 0, 0);
   //   let imgData = ctx.getImageData(x, y, width, height).data;
   //   floatImage = new Float32Array(image);
   // }
-  $: prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", exampleSize, exampleStyle);
+  $: drawCanvas("birds.jpg", "fixedCanvas", exampleSize, initFinished);
+  $: drawCanvas(exampleStyle + ".jpg", "styleCanvas", 200, initFinished);
+
+  $: prepareAndRunStyle(
+    "birds.jpg",
+    "fixedStyleCanvas",
+    exampleSize,
+    exampleStyle
+  );
+
   function init() {
-    drawCanvas("birds.jpg", "fixedCanvas", 300);
+    initFinished = true;
     // prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", exampleSize, exampleStyle);
     window.addEventListener("load", function () {
       document
@@ -38,8 +48,8 @@
     });
   }
   document.addEventListener("DOMContentLoaded", init, false);
-
 </script>
+
 <!-- <Nav/> -->
 <main>
   <datalist id="imageSizeOptions">
@@ -49,6 +59,7 @@
   >
 
   <h2>Lets perform a style transfer on a pre-selected image</h2>
+  <canvas id="styleCanvas" width={200} height={200} />
   <h3>You can change style and size:</h3>
   <label>
     Style:
@@ -59,16 +70,22 @@
     <input type="radio" bind:group={exampleStyle} value="rain" />
     Rain Princess
   </label>
-  {#each [135,200, 300, 350] as value}
-      <input type="radio" bind:group={exampleSize} {value} />&emsp;{value}&emsp;
-    {/each}
+  Size:
+  {#each [135, 200, 300, 350] as value}
+    <input type="radio" bind:group={exampleSize} {value} />&emsp;{value}&emsp;
+  {/each}
+  px in both dimensions.
   <br />
+  The maximum possible size depends on your device.
+  <br /><br />
 
-  <canvas id="fixedCanvas" width={300} height={300} />
+  <canvas id="fixedCanvas" width={exampleSize} height={exampleSize} />
   <canvas id="fixedStyleCanvas" width={initialSize} height={exampleSize} />
 
+  <h2>The complete style transfer is run locally on your computer.</h2>
   <h2>
-    Now it's your turn. Choose a style and your own content image and see the result
+    Now it's your turn. Choose a style and your own content image and see the
+    result
   </h2>
   <label>
     Style:
@@ -89,8 +106,8 @@
   <h2>You can also modify the size of the images</h2>
   <br />
   <h2>
-    (enter size and choose a different image
-    afterwards. Large sizes might lead to problems.)
+    (enter size and choose a different image afterwards. Large sizes might lead
+    to problems.)
   </h2>
 
   {#if style === `candy`}
@@ -119,7 +136,7 @@
       <input type="number" bind:value={imageSize} />
     </label> -->
   {:else if style === `gogh` || style === `rain`}
-    {#each [135,200, 300, 350, 400, 500, 1000] as value}
+    {#each [135, 200, 300, 350, 400, 500, 1000] as value}
       <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
     {/each}
   {/if}
@@ -128,9 +145,9 @@
     The code of this website is available <a
       href="https://github.com/kleinicke/fast_web_style_transfer">on GitHub</a
     > and a first version of the tutorial is below.
-  </h2>  
+  </h2>
 </main>
-<Tutorial/>
+<Tutorial />
 
 <style>
   main {

@@ -8,13 +8,8 @@ async function runOnnx(inputTensor, canvasName, imageSize, style) {
   let session = new InferenceSession({
     backendHint: "webgl",
   });
-  if (style == "candy") {
-    await session.loadModel("small" + imageSize + ".onnx");
-  } else {
-    await session.loadModel(style + imageSize + ".onnx");
-  } // else if (style == "gogh") {
-  //   await session.loadModel("gogh" + imageSize + ".onnx");
-  // }
+
+  await session.loadModel(style + imageSize + ".onnx");
 
   // Run model with Tensor inputs and get the result.
   // console.log("input_pre!!!",preprocessedData)
@@ -85,18 +80,25 @@ async function runOnnx(inputTensor, canvasName, imageSize, style) {
   ctx.putImageData(idata, 0, 0);
 }
 
-export function drawCanvas(imageSrc, canvasName, imageSize) {
-  const canvas = document.getElementById(canvasName);
-  // console.log("c",canvas)
-  const ctx = canvas.getContext("2d");
-  const image = new Image(imageSize, imageSize);
-  image.src = imageSrc;
-  function drawImageActualSize() {
-    canvas.width = imageSize; //this.naturalWidth;
-    canvas.height = imageSize; //this.naturalHeight;
-    ctx.drawImage(this, 0, 0, this.width, this.height);
+export function drawCanvas(
+  imageSrc,
+  canvasName,
+  imageSize,
+  initFinished = true
+) {
+  if (initFinished) {
+    const canvas = document.getElementById(canvasName);
+    // console.log("c",canvas)
+    const ctx = canvas.getContext("2d");
+    const image = new Image(imageSize, imageSize);
+    image.src = imageSrc;
+    function drawImageActualSize() {
+      canvas.width = imageSize; //this.naturalWidth;
+      canvas.height = imageSize; //this.naturalHeight;
+      ctx.drawImage(this, 0, 0, this.width, this.height);
+    }
+    image.onload = drawImageActualSize;
   }
-  image.onload = drawImageActualSize;
 }
 
 async function getData(imageSrc, imageSize) {
