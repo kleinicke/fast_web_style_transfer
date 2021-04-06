@@ -1,14 +1,15 @@
 <script>
-    import MdText from './tutorial.md'
+  import MdText from "./tutorial.md";
 </script>
+
 <main>
-    <MdText/>
+  <MdText />
 </main>
 
 <style>
   main {
-    margin-right: 200px;
-    margin-left: 200px;
+    margin-right: 10%;
+    margin-left: 10%;
     margin-top: 50px;
     padding-bottom: 100px;
   }

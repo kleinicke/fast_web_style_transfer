@@ -1,92 +1,56 @@
 <script>
   import { prepareAndRunStyle, drawCanvas } from "./runStyle.js";
-  import SvelteMarkdown from "svelte-markdown";
-  // import Nav from './Nav.svelte'
   import Tutorial from "./Tutorial.svelte";
-  let initFinished = false;
-  const initialSize = 135;
-  let imageSize = initialSize; // options are 135, 270, 360 and 540
-  let exampleSize = initialSize;
+  import { onMount } from "svelte";
 
-  const initialStyle = "gogh"; //"candy" "rain"
-  let style = initialStyle;
-  let exampleStyle = initialStyle;
-
-  // function toFloat(image) {
-  //   ctx.drawImage(img, 0, 0);
-  //   let imgData = ctx.getImageData(x, y, width, height).data;
-  //   floatImage = new Float32Array(image);
-  // }
-  $: drawCanvas("birds.jpg", "fixedCanvas", exampleSize, initFinished);
-  $: drawCanvas(exampleStyle + ".jpg", "styleCanvas", 200, initFinished);
+  let hasLoaded = false;
+  let fileSelected = false;
+  let selectedImg = "";
+  let canvasSize = 135;
+  let style = "gogh"; //"candy" "rain"
+  let contentImage = "birds";
+  let selectSize = 135;
+  let selectStyle = "gogh"; //"candy" "rain"
+  // $: if (typeof window !== 'undefined') {
+  $: drawCanvas(contentImage + ".jpg", "contentCanvas", canvasSize, hasLoaded);
+  $: drawCanvas(style + ".jpg", "styleCanvas", 200, hasLoaded);
 
   $: prepareAndRunStyle(
-    "birds.jpg",
-    "fixedStyleCanvas",
-    exampleSize,
-    exampleStyle
+    contentImage + ".jpg",
+    "resultCanvas",
+    canvasSize,
+    style,
+    hasLoaded
   );
+  $: prepareAndRunStyle(
+    selectedImg,
+    "selectResultCanvas",
+    selectSize,
+    selectStyle,
+    fileSelected
+  );
+  $: drawCanvas(selectedImg, "selectContentCanvas", selectSize, fileSelected);
+  $: drawCanvas(selectStyle + ".jpg", "selectStyleCanvas", 200, hasLoaded);
 
-  function init() {
-    initFinished = true;
-    // prepareAndRunStyle("birds.jpg", "fixedStyleCanvas", exampleSize, exampleStyle);
-    window.addEventListener("load", function () {
-      document
-        .querySelector('input[type="file"]')
-        .addEventListener("change", function () {
-          if (this.files && this.files[0]) {
-            let selectedImg = URL.createObjectURL(this.files[0]);
-            drawCanvas(selectedImg, "selectCanvas", imageSize);
-            prepareAndRunStyle(
-              selectedImg,
-              "selectStyleCanvas",
-              imageSize,
-              style
-            );
-          }
-        });
-    });
-  }
-  document.addEventListener("DOMContentLoaded", init, false);
+  onMount(async () => {
+    hasLoaded = true;
+    console.log("loaded");
+    document
+      .querySelector('input[type="file"]')
+      .addEventListener("change", function () {
+        if (this.files && this.files[0]) {
+          selectedImg = URL.createObjectURL(this.files[0]);
+          fileSelected = true;
+        }
+      });
+  });
 </script>
 
 <!-- <Nav/> -->
 <main>
-  <datalist id="imageSizeOptions">
-    <option value="135" /><option value="270" /><option value="360" /><option
-      value="540"
-    /></datalist
-  >
-
   <h2>Lets perform a style transfer on a pre-selected image</h2>
   <canvas id="styleCanvas" width={200} height={200} />
   <h3>You can change style and size:</h3>
-  <label>
-    Style:
-    <input type="radio" bind:group={exampleStyle} value="gogh" />
-    Van Gogh
-    <input type="radio" bind:group={exampleStyle} value="candy" />
-    Candy
-    <input type="radio" bind:group={exampleStyle} value="rain" />
-    Rain Princess
-  </label>
-  Size:
-  {#each [135, 200, 300, 350] as value}
-    <input type="radio" bind:group={exampleSize} {value} />&emsp;{value}&emsp;
-  {/each}
-  px in both dimensions.
-  <br />
-  The maximum possible size depends on your device.
-  <br /><br />
-
-  <canvas id="fixedCanvas" width={exampleSize} height={exampleSize} />
-  <canvas id="fixedStyleCanvas" width={initialSize} height={exampleSize} />
-
-  <h2>The complete style transfer is run locally on your computer.</h2>
-  <h2>
-    Now it's your turn. Choose a style and your own content image and see the
-    result
-  </h2>
   <label>
     Style:
     <input type="radio" bind:group={style} value="gogh" />
@@ -97,49 +61,56 @@
     Rain Princess
   </label>
   <br />
-
-  <input type="file" />
+  Size:
+  {#each [135, 200, 300, 350, 500] as value}
+    <input type="radio" bind:group={canvasSize} {value} />&emsp;{value}&emsp;
+  {/each}
+  px in both dimensions.
   <br />
-  <canvas id="selectCanvas" width={imageSize} height={imageSize} />
-  <canvas id="selectStyleCanvas" width={imageSize} height={imageSize} />
-
-  <h2>You can also modify the size of the images</h2>
+  The maximum possible size depends on your device. Large sizes might lead to problems.
   <br />
+  <label>
+    Content image:
+    <input type="radio" bind:group={contentImage} value="birds" />
+    Birds
+    <input type="radio" bind:group={contentImage} value="neckar" />
+    Neckar
+    <input type="radio" bind:group={contentImage} value="castle" />
+    Castle
+  </label>
+  <br /><br />
+
+  <canvas id="contentCanvas" width={canvasSize} height={canvasSize} />
+  <canvas id="resultCanvas" width={canvasSize} height={canvasSize} />
+
+  <h2>The complete style transfer is run locally on your computer.</h2>
   <h2>
-    (enter size and choose a different image afterwards. Large sizes might lead
-    to problems.)
+    Now it's your turn. Choose a style and your own content image and see the
+    result:
   </h2>
+  <canvas id="selectStyleCanvas" width={200} height={200} />
+  <label>
+    Style:
+    <input type="radio" bind:group={selectStyle} value="gogh" />
+    Van Gogh
+    <input type="radio" bind:group={selectStyle} value="candy" />
+    Candy
+    <input type="radio" bind:group={selectStyle} value="rain" />
+    Rain Princess
+  </label>
+  <br />
+  Size:
+  {#each [135, 200, 300, 350, 500] as value}
+    <input type="radio" bind:group={selectSize} {value} />&emsp;{value}&emsp;
+  {/each}
+  px in both dimensions. <br />
+  Content image: <input type="file" />
+  <br />
+  The maximum possible size depends on your device. Large sizes might lead to problems.
+  <br /><br />
 
-  {#if style === `candy`}
-    <label>
-      Small size (for phones):
-      <input type="radio" bind:group={imageSize} value={135} />
-      135
-      <input type="radio" bind:group={imageSize} value={200} />
-      200
-    </label>
-    <label>
-      Good size (works on most computers):
-      <input type="radio" bind:group={imageSize} value={270} />
-      270
-      <input type="radio" bind:group={imageSize} value={300} />
-      300
-    </label>
-    <label>
-      Large (requires some performance):
-      <input type="radio" bind:group={imageSize} value={350} />
-      350
-      <input type="radio" bind:group={imageSize} value={540} />
-      540
-    </label>
-    <!-- <label>
-      <input type="number" bind:value={imageSize} />
-    </label> -->
-  {:else if style === `gogh` || style === `rain`}
-    {#each [135, 200, 300, 350, 400, 500, 1000] as value}
-      <input type="radio" bind:group={imageSize} {value} />&emsp;{value}&emsp;
-    {/each}
-  {/if}
+  <canvas id="selectContentCanvas" width={canvasSize} height={canvasSize} />
+  <canvas id="selectResultCanvas" width={canvasSize} height={canvasSize} />
 
   <h2>
     The code of this website is available <a
