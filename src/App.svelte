@@ -48,7 +48,7 @@
 
 <!-- <Nav/> -->
 <main>
-  <h2>Lets perform a style transfer on a pre-selected image</h2>
+  <h2>Lets perform a style transfer on a few of my images</h2>
   <canvas id="styleCanvas" width={200} height={200} />
   <h3>You can change style and size:</h3>
   <label>
@@ -66,9 +66,12 @@
     <input type="radio" bind:group={canvasSize} {value} />&emsp;{value}&emsp;
   {/each}
   px in both dimensions.
-  <br />
-  The maximum possible size depends on your device. Large sizes might lead to problems.
-  <br />
+  <!-- <br /> -->
+  <h4>
+    The maximum possible size depends on your device. Large sizes might lead to
+    problems.
+  </h4>
+  <!-- <br /> -->
   <label>
     Content image:
     <input type="radio" bind:group={contentImage} value="birds" />
@@ -77,6 +80,8 @@
     Neckar
     <input type="radio" bind:group={contentImage} value="castle" />
     Castle
+    <input type="radio" bind:group={contentImage} value="neckarfront" />
+    Neckarfront
   </label>
   <br /><br />
 
@@ -84,6 +89,10 @@
   <canvas id="resultCanvas" width={canvasSize} height={canvasSize} />
 
   <h2>The complete style transfer is run locally on your computer.</h2>
+  <h4>
+    Sadly the style is applied on a very small level, so the bigger elements of
+    the original style are not applied.
+  </h4>
   <h2>
     Now it's your turn. Choose a style and your own content image and see the
     result:
