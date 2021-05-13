@@ -124,13 +124,26 @@
   <h2>
     The code of this website is available <a
       href="https://github.com/kleinicke/fast_web_style_transfer">on GitHub</a
-    > and a first version of the tutorial is below.
+    >.
+  </h2>
+  <h2>
+    A tutorial how to build this site and train the corresponding website is
+    available
+    <a
+      href="https://github.com/kleinicke/fast_web_style_transfer/blob/master/src/tutorial.md"
+      >on GitHub</a
+    >
+    and
+    <a
+      href="https://kleinicke.medium.com/how-to-perform-a-neural-style-transfer-on-a-website-using-onnx-js-85b8dbb745d8"
+      >on medium</a
+    >.
   </h2>
 </main>
-<Tutorial />
 
 <style>
   main {
     text-align: center;
+    padding-bottom: 100px;
   }
 </style>

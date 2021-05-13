@@ -42,7 +42,8 @@ The created ONNX models can now be used on the website.
 
 ## Building the website
 
-Therefore we use Svelte. This is a modern framework which can be used to build static websites. On their website they describe how to download a demo template version of a Svelte website. After downloading and installing the prerequisites, the website using ONNX.js can be build.
+I decided to use Svelte as a foundation of the website.
+This is a modern framework which can be used to build static websites. On their website they describe how to download a demo template version of a Svelte website. After downloading and installing the prerequisites, the website using ONNX.js can be build.
 When yarn is installed, the packages of the websites are downloaded and installed when you navigate to the folder of the project in the terminal and enter `yarn`. After these are installed you enter `yarn dev` to build the website. Afterwards it is available to browse on a given port. Whenever you change something in the text file it is almost immediately updated on the website.
 The Svelte project contains of multiple folders. Most important are the for this tutorial are the folders `public`, where you can store all files that should be accessed on the website (images, ONNX.js model, …) and `src` which contains the file `App.svelte`. In this file, the content of the website is written.
 In the `main` section of the Svelte file a image selector and two canvas where images can be shown are created like this.
@@ -203,7 +204,9 @@ All this is implemented [in this repro](https://github.com/kleinicke/fast_web_st
 
 ## Limitations
 
-The limitations of this implementation is that in most browsers are temporal limits to compute the results. When it takes too long, a black image is returned. Since the runtime depends on the computer of the user, this is a hard to predict problem.
+The problem with ONNX.js is that it is not compatible with most neural network architectures. Therefore it is of limited use. For this example it is possible to change the architecture to fit the need. For a productive application these constraints are too limited because there is probably no modern architecture that is compatible with ONNX.js.
+
+Another limitation of this implementation is that in most browsers are temporal limits to compute the results. When it takes too long, a black image is returned. Since the runtime depends on the computer of the user, this is a hard to predict problem.
 An additional problem is the usage of memory. While this is usually no problem on a computer, phones have harder rules on this. On iOS, an app is only allowed to use half of the total memory. Since the neural network is run in the browser app, the network can only allocate an even smaller fraction of the total memory. In devices with 4 GB of memory, it's somewhere around 1 to 1.5 GB. In this setup this is enough for a style transfer of an image with the resolution 200 times 200 pixels. Still older iPhones with 4 GB of Memory reload the website when an image with such an resolution is processed.
 The solution to this problem might be to use TensorFlow.js instead of ONNX.js. This framework seems to be more advanced by now.
 
