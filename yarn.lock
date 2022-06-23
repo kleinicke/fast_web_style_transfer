@@ -312,6 +312,11 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
+flatbuffers@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/flatbuffers/-/flatbuffers-1.12.0.tgz#72e87d1726cb1b216e839ef02658aa87dcef68aa"
+  integrity sha512-c7CZADjRcl6j0PlvFy0ZqXQ67qSEZfrVPynmnL+2zPc+NtMvrF8Y0QceMo7QqnSPc7+uWjUIAbvCQ5WIKlMVdQ==
+
 front-matter@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/front-matter/-/front-matter-3.2.1.tgz#88be839638f397bbbcb0d61ac03bd08abb4f0a40"
@@ -357,6 +362,11 @@ glob@^7.1.6:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
+
+guid-typescript@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/guid-typescript/-/guid-typescript-1.0.9.tgz#e35f77003535b0297ea08548f5ace6adb1480ddc"
+  integrity sha512-Y8T4vYhEfwJOTbouREvG+3XDsjr8E3kIr7uf+JZ0BYloFsttiHU0WfvANVsR7TxNUJa/WpCnw/Ino/p+DeBhBQ==
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -572,6 +582,23 @@ onnxjs@^0.1.8:
   integrity sha512-7yxFq6cOVUm23OW9gUvDcfkG9OR5Fkleaa4Ce+rhExQmI8OTx6hdb2/9I1jRbyVLJRxlL0MDQgQCb4YxdLcZGw==
   dependencies:
     onnx-proto "^4.0.4"
+    platform "^1.3.6"
+
+onnxruntime-common@~1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/onnxruntime-common/-/onnxruntime-common-1.11.0.tgz#64bb6e4163fcaab3d46ce600e0f0b62f68f56178"
+  integrity sha512-nXcGm2zutRfpIUDmESXZDWX07VFOZ+0KcDW/H86kMLv3o1RBcGFfPPOLSRP0ohoJtBQj3uV3dB/fQOqI6fqjiA==
+
+onnxruntime-web@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/onnxruntime-web/-/onnxruntime-web-1.11.0.tgz#6903e29d46411ab15eb4c998276221d7bdb98698"
+  integrity sha512-9b1luHvpDGL7R1TygGHG7PTWoPWFmIs5qoe8fNSjjyVT4HtvdmDM7yiSIty/IlApTt8qhnRLRrlVywGNeXGNxw==
+  dependencies:
+    flatbuffers "^1.12.0"
+    guid-typescript "^1.0.9"
+    long "^4.0.0"
+    onnx-proto "^4.0.4"
+    onnxruntime-common "~1.11.0"
     platform "^1.3.6"
 
 "opts@>= 1.2.0":

@@ -1,7 +1,7 @@
 // import onnxjs from "onnxjs";
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
-import { Tensor, InferenceSession } from "onnxjs";
+import { Tensor, InferenceSession } from "onnxruntime-web";
 
 export function drawCanvas(
   imageSrc,
@@ -76,23 +76,59 @@ export async function prepareAndRunStyle(
     console.log("preprocessed data", floatData, dataFromImage, dataProcessed);
 
     const inputTensor = new Tensor(
-      new Float32Array(3 * imageSize * imageSize),
       "float32",
+      new Float32Array(3 * imageSize * imageSize),
       [1, 3, imageSize, imageSize]
     );
     inputTensor.data.set(dataProcessed.data);
     dataFromImage = null;
     dataProcessed = null;
     // Creat the session and load the pre-trained model
-    let session = new InferenceSession({
-      backendHint: "webgl",
+    let modelName = "";
+    if (imageSize == 224) {
+      modelName = "mosaic-9.onnx";
+    } else {
+      modelName = style + imageSize + ".onnx";
+    }
+    console.log("modelName", modelName);
+    let session = await InferenceSession.create(modelName, {
+      executionProviders: ["webgl"],
     });
+
+    // let session = await InferenceSession.create(
+    //   "https://github.com/onnx/models/raw/main/vision/style_transfer/fast_neural_style/model/mosaic-9.onnx",
+    //   {
+    //     executionProviders: ["webgl"],
+    //   }
+    // );
+    // let session = new InferenceSession({
+    //   backendHint: "webgl",
+    // });
     console.log("loading onnx:", style + imageSize + ".onnx");
-    await session.loadModel(style + imageSize + ".onnx");
+    // await session.loadModel(style + imageSize + ".onnx");
     // Run model with Tensor inputs and get the result.
-    const outputMap = await session.run([inputTensor]);
+    // console.log("inputTensor: ", inputTensor);
+
+    // const outputMap = await session.run({ "input.1": inputTensor });
+    let outputMap = {};
+    if (imageSize == 224) {
+      outputMap = await session.run({ input1: inputTensor });
+    } else {
+      outputMap = await session.run({ "input.1": inputTensor });
+    }
     session = null;
-    let outputData = outputMap.values().next().value.data;
+    // for (var key in outputMap) {
+    //   console.log("key: ", key);
+    // }
+    // console.log("key: ", outputMap[1]);
+    // console.log("data", Object.values(outputMap)[0].data);
+
+    // console.log("outputMap: ", outputMap);
+    // console.log("outputMap76: ", outputMap.values);
+    // console.log("outputMap0val: ", outputMap[76].data);
+    console.log("outputMap: ", outputMap);
+
+    let outputData = Object.values(outputMap)[0].data;
     const dataFromImageBack = ndarray(
       new Float32Array(imageSize * imageSize * 4),
       [imageSize, imageSize, 4]
