@@ -6,6 +6,8 @@ This website uses onnx.js to apply a fast neural style transfer. It is used on <
 
 The used model was created using the model I created [here](https://github.com/kleinicke/onnx_small_style). This can be run using [this google colab notebook](https://colab.research.google.com/drive/15Uo8C-maoLmOJdOC54_rTo_lORNHZ29P?usp=sharing).
 
+The project is explained at: https://github.com/kleinicke/fast_web_style_transfer/blob/master/src/tutorial.md
+
 ## Setup
 
 Running this site locally requires [`git`](https://git-scm.com) and [`yarn`](https://yarnpkg.com) (or [`npm`](https://npmjs.com)). With those installed, do:

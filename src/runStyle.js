@@ -1,4 +1,3 @@
-// import onnxjs from "onnxjs";
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { Tensor, InferenceSession } from "onnxruntime-web";
@@ -49,10 +48,6 @@ export async function prepareAndRunStyle(
   hasLoaded = true
 ) {
   if (hasLoaded) {
-    // const onnxjs = await import('onnxjs')
-    // const ops = await import('ndarray-ops')
-    // const ndarray = (await import('ndarray'))['default']
-    // console.log('ndarray', ndarray['default'])
     let floatData = await getData(imageSrc, imageSize);
     let dataFromImage = ndarray(floatData, [imageSize, imageSize, 4]);
     let dataProcessed = ndarray(new Float32Array(imageSize * imageSize * 3), [
@@ -95,6 +90,11 @@ export async function prepareAndRunStyle(
       executionProviders: ["webgl"],
     });
 
+    const inputName = session.inputNames[0];
+    const outputName = session.outputNames[0];
+
+    // console.log("session.inputNames", session.inputNames);
+    // console.log("session.inputNames", session.outputNames);
     // let session = await InferenceSession.create(
     //   "https://github.com/onnx/models/raw/main/vision/style_transfer/fast_neural_style/model/mosaic-9.onnx",
     //   {
@@ -111,11 +111,9 @@ export async function prepareAndRunStyle(
 
     // const outputMap = await session.run({ "input.1": inputTensor });
     let outputMap = {};
-    if (imageSize == 224) {
-      outputMap = await session.run({ input1: inputTensor });
-    } else {
-      outputMap = await session.run({ "input.1": inputTensor });
-    }
+
+    outputMap = await session.run({ [inputName]: inputTensor });
+
     session = null;
     // for (var key in outputMap) {
     //   console.log("key: ", key);
@@ -128,7 +126,8 @@ export async function prepareAndRunStyle(
     // console.log("outputMap0val: ", outputMap[76].data);
     console.log("outputMap: ", outputMap);
 
-    let outputData = Object.values(outputMap)[0].data;
+    // let outputData = Object.values(outputMap)[0].data;
+    let outputData = outputMap[outputName].data;
     const dataFromImageBack = ndarray(
       new Float32Array(imageSize * imageSize * 4),
       [imageSize, imageSize, 4]
